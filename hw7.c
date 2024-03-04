@@ -2,33 +2,62 @@
 #include <string.h>
 #include <stdlib.h>
 
-int change(char x){
-    if(x=='A'){return 0;}
-    else if(x=='B'){return 1;}
-    else{return 2;}
-}
-
 int main(){
-    int M,x,y,score[3][2],tmppoint[2];
-    char tmpc1,tmpc2,tmpscore[6],token;
+    int M,team1[2]={0,0},team2[2]={0,0},team3[2]={0,0},tmpscore1,tmpscore2;
+    char tmpt1[20],tmpt2[20];
     scanf("%d",&M);
     for(int i=0;i<M;i++){
-        scanf("%c %c",&tmpc1,&tmpc2);
-        x=change(tmpc1);
-        y=change(tmpc2);
+        int total1=0,total2=0;
+        scanf("%s %s",&tmpt1,&tmpt2);
         for(int j=0;j<4;j++){
-            scanf("%c",&tmpscore);
-            char *token=strtok(tmpscore," ");
-            tmppoint[0]+=atoi(token);
-            token=strtok(NULL," ");
-            tmppoint[1]+=atoi(token);
+            scanf("%d %d",&tmpscore1,&tmpscore2);
+            total1+=tmpscore1;
+            total2+=tmpscore2;
         }
-        score[x][1]+=tmppoint[0];
-        score[y][1]+=tmppoint[1];
-        if(tmppoint[0]>tmppoint[1]){
-            score[x][0]+=1;
+        if(total1>total2){
+            if(strcmp(tmpt1,"A")==0){//AB、BC、AC
+                team1[0]+=1;
+            }
+            else{//BC
+                team2[0]+=1;
+            }
         }
-        else{score[y][0]+=1;}
+        else{
+            if(strcmp(tmpt2,"B")==0){//AB
+                team2[0]+=1;
+            }
+            else{//AC、BC
+                team3[0]+=1;
+            }
+        }
+        if(strcmp(tmpt1,"A")==0){//AB,AC
+            team1[1]+=total1;
+            if(strcmp(tmpt2,"B")==0){
+                team2[1]+=total2;
+            }
+            else{
+                team3[1]+=total2;
+            }
+        }
+        else{//BC
+            team2[1]+=total1;
+            team3[1]+=total2;
+        }
     }
-    printf("%d %d %d %d %d %d",score[0][1],score[1][1],score[2][1],score[0][0],score[1][0],score[2][0]);
+    if (team1[0]>team2[0]){
+        if(team1[0]>team3[0]){
+            printf("A\n%d",team1[1]);
+        }
+        else{
+            printf("C\n%d",team3[1]);
+        }
+        }
+    else{
+        if(team2[0]>team3[0]){
+            printf("B\n%d",team2[1]);
+        }
+        else{
+            printf("C\n%d",team3[1]);
+        }
+    }
 }
