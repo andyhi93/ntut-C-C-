@@ -91,6 +91,9 @@ void cal(int top1,int top2,int bot1,int bot2,char symbol,char ans[],int sub1,int
         }
     if (resulttop == 0) {
         sprintf(ans, "0");
+    }
+    else if(resultbot==1){
+        sprintf(ans,"%d",resulttop);
     } else if (abs(resulttop)<abs(resultbot)) {
         sprintf(ans,"%d/%d",resulttop,resultbot);
     } else {
