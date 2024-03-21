@@ -14,36 +14,34 @@ int ToDe(int b,char v[100]){
     int de=0,temp;
     for(int i=0;i<strlen(v);i++){
         if(isdigit(v[i])){
-            printf("v[i]: %d\n",v[i]-'0');
             de+=(v[i]-'0')*cpower(b,strlen(v)-1-i);
-            printf("ch: %d\n",(v[i]-'0')*cpower(b,strlen(v)-1-i));
             }
         else{
-            printf("v2: %c %d\n",v[i],v[i]-'7');
             de+=(v[i]-'7')*cpower(b,strlen(v)-1-i);
-            printf("ch: %d\n",(v[i]-'0')*cpower(b,strlen(v)-1-i));
         }
     }
-    printf("de: %d\n",de);
     return de;
 }
 void turnans(int de,int b,char ans[100]){
-    int j=0;
+    int j=0,k;
     while (de>0)
     {
-        j=de%b;
-        printf("j: %d\n",j);
-        if(j<10){
-            ans[j++]=j+'0';
+        k=de%b;
+        if(k<10){
+            ans[j++]=k+'0';
         }
         else{
-            ans[j++]=j+'7';
+            ans[j++]=k+'A'-10;
         }
         de/=b;
     }
-    
+    if(j==0){
+        printf("%d",0);
+    }
+    else{
     for(int i=j-1;i>=0;i--){
-        printf("%c",ans[i]);
+            printf("%c",ans[i]);
+        }
     }
 }
 int main(){
