@@ -4,9 +4,10 @@
 #include <string.h>
 
 int main(){
-    int base[3]={0,0,0},outnum,player[9][6];
+    int base[3]={0,0,0},outnum,player[9][6],data[9][3]={0};
     char temp[100],*tprt;
     for(int i=0;i<9;i++){
+        data[i][0]=i+1;
         fgets(temp, sizeof(temp), stdin);
         int k=1;
         player[i][0]=temp[0]-'0';
@@ -31,6 +32,7 @@ int main(){
                 counter++;
                 zerocnt++;
                 if(zerocnt==3){
+                    zerocnt=0;
                     for(int k=0;k<3;k++){
                         base[k]=0;
                     }
@@ -42,33 +44,52 @@ int main(){
                 }
             }
             else{
-                for(int k=2;k>=0;k--){//ç§»å‹•
+                for(int k=2;k>=0;k--){//²¾°Ê
                     if(base[k]!=0){
                         if(k+player[j][i]>2){
+                            data[base[k]-1][2]+=3-k;
                             base[k]=0;
                             score++;
-                            printf("add:%d %d\n",k,player[j][i]);
                         }
                         else{
+                            data[base[k]-1][2]+=player[j][i];
+                            base[k+player[j][i]]=base[k];
                             base[k]=0;
-                            base[k+player[j][i]]=1;
                         }
                     }
                 }
                 if(player[j][i]<4){
-                    base[player[j][i]-1]=1;
+                    data[j][1]+=1;
+                    data[j][2]+=player[j][i];
+                    base[player[j][i]-1]=j+1;
                 }
                 else{
+                    data[j][1]+=1;
+                    data[j][2]+=4;
                     score++;
-                    printf("add\n");
                     }
             }
-            printf("m: %d base: %d %d %d\n",player[j][i],base[0],base[1],base[2]);
         }
         if(counter==outnum){
-            break;    
+            break;
         }
     }
-    printf("p:%d %d\n",p1,p2);
-    printf("score: %d",score);
+    int ans[3][2];
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 2; j++) {
+            ans[i][j] = -1;
+        }
+    }
+    for(int i=0;i<3;i++){
+        for(int j=0;j<9;j++){
+            if(data[j][2]>ans[i][1] && j!=ans[0][0] && j!=ans[1][0]){
+                ans[i][1]=data[j][2];
+                ans[i][0]=j;
+            }
+        }
+    }
+    printf("%d\n",score);
+    for(int i=0;i<3;i++){
+        printf("%d %d %d\n",data[ans[i][0]][0],data[ans[i][0]][1],data[ans[i][0]][2]);
+    }
 }
