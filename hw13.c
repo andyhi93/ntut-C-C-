@@ -21,17 +21,11 @@ int GCD(int a,int b){
 void mfraction(int numerator,int denominator,char temp[100],int *z){
     int g=GCD(numerator,denominator);
     if(numerator%denominator!=0){
-        if(numerator>0 && denominator>0){
+        if(numerator*denominator>0){
             sprintf(temp,"y = %d/%dx",abs(numerator/g),abs(denominator/g));
-        }
-        else if(numerator<0 && denominator<0){
-            sprintf(temp,"y = %d/%dx",abs(numerator/g),abs(denominator/g));
-        }
-        else if(denominator<0){
-            sprintf(temp,"y = -%d/%dx",numerator/g,-denominator/g);
         }
         else{
-            sprintf(temp,"y = -%d/%dx",-numerator/g,denominator/g);
+            sprintf(temp,"y = -%d/%dx",abs(numerator/g),abs(denominator/g));
         }
     }
     else if(numerator/denominator==0){
@@ -54,7 +48,7 @@ void mfraction(int numerator,int denominator,char temp[100],int *z){
 void bfraction(int numerator,int denominator,char ans[100],int z){
     int g=GCD(numerator,denominator);
     if(numerator%denominator!=0){
-        if(numerator>0 && denominator>0){
+        if(numerator*denominator>0){
             if(z==1){
                 sprintf(ans,"%d/%d",abs(numerator/g),abs(denominator/g));
             }
@@ -62,23 +56,17 @@ void bfraction(int numerator,int denominator,char ans[100],int z){
                 sprintf(ans," + %d/%d",abs(numerator/g),abs(denominator/g));
             }
         }
-        else if(numerator<0 && denominator<0){
-             if(z==1){
-                sprintf(ans,"%d/%d",abs(numerator/g),abs(denominator/g));
+        else{
+            if(z==1){
+                sprintf(ans,"-%d",abs(numerator/g),abs(denominator/g));
             }
             else{
-                sprintf(ans," + %d/%d",abs(numerator/g),abs(denominator/g));
+                sprintf(ans," - %d/%d",abs(numerator/g),abs(denominator/g));
             }
-        }
-        else if(denominator<0){
-            sprintf(ans," - %d/%d",numerator/g,-denominator/g);
-        }
-        else{
-            sprintf(ans," - %d/%d",-numerator/g,denominator/g);
         }
     }
     else if(numerator/denominator==0){
-        sprintf(ans," ");
+        sprintf(ans,"");
     }
     else{
         if(numerator/denominator>0){
@@ -90,16 +78,22 @@ void bfraction(int numerator,int denominator,char ans[100],int z){
             }
         }
         else{
-            sprintf(ans," - %d",-numerator/denominator);
+            if(z==1){
+                sprintf(ans,"-%d",abs(numerator/denominator));
+            }
+            else{
+                sprintf(ans," - %d",-numerator/denominator);
+            }
         }
     }
 }
 
 int main(){
-    int times,x1,y1,x2,y2,z=0;
+    int times,x1,y1,x2,y2,z;
     char ans[5][100],temp[100];
     scanf("%d",&times);
     for(int i=0;i<times;i++){
+        z=0;
         scanf(" %d %d %d %d",&x1,&y1,&x2,&y2);
         mfraction(y1-y2,x1-x2,ans[i],&z);
         bfraction(x2*y1-x1*y2,x2-x1,temp,z);
