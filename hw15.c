@@ -1,55 +1,91 @@
 #include <stdio.h>
 #include <string.h>
 
+void sorted(int a[100][10],int s,int m,int j,int index[100],int d){
+    //s¸ê®Æ¶q mªø«× j¥Ø«e¤ñ¸û¯Á¤Þ d¥Ø«e±Æ§Ç¯Á¤Þ
+    int smallest[2]={10,0},same=0;
+    for(int i=0;i<s;i++){
+        for(int k=0;k<s;k++){
+            if(i==index[k]){same=1;}
+        }
+        if(same){
+            same=0;
+            continue;
+        }
+        if(a[i][j]<smallest[0]){
+            smallest[1]=i;
+            smallest[0]=a[i][j];
+        }
+        else if(a[i][j]==smallest[0]){
+            int next = j + 1;
+            while (next < m && a[i][next] == a[smallest[1]][next]) {
+                next++;
+            }
+            if (next == m || a[i][next] < a[smallest[1]][next]) {
+                smallest[1] = i;
+            }
+        }
+    }
+    index[d]=smallest[1];
+}
+
 int main(){
     int m,neg,input[20],data[100][10],n=0,len,sort[100][10],ans[100][10];
-    char temp[30];
+    char temp[50];
     scanf("%d ",&m);
     fgets(temp, sizeof(temp), stdin);
     len=(strlen(temp)+1)/2;
-    printf("len:%d\n",len);
     int i=0,repeat=0;
     while(i<strlen(temp)){
         input[i/2]=temp[i]-'0';
         i+=2;
     }
     scanf("%d",&neg);
-    for(int i=0;i<len;i++){
-        printf("%d ",input[i]);
-    }
-    printf("\n");
     for(int i=0;i<len-m+1;i++){
         for(int j=0;j<m;j++){
             data[i][j]=input[i+j];
         }
-        for(int j=0;j<m;j++){
-            printf("%d ",data[i][j]);
-        }
-        printf("\n");
     }
-    int s=0;
-    for(int i=0;i<len-m+1;i++){//é‡è¤‡ç§»é™¤
-        repeat=0;
-        for(int j=0;j<i;j++){
-            for(int k=0;k<m;k++){
-                if(data[i][k]==data[j][k]){
-                    repeat++;
+    int s=0,count,r=0;
+    for(int i=0;i<len-m+1;i++){//­«½Æ²¾°£
+        repeat=0,count=0;
+        for(int j=0;j<m;j++){//­«½Æ¼Æ¦r
+            for(int k=j+1;k<m;k++){
+                if(data[i][k]==data[i][j]){
+                    repeat=1;
                 }
             }
         }
-        if(repeat!=m){
+        for(int j=0;j<s;j++){
+            for(int k=0;k<m;k++){
+                if(data[i][k]==sort[j][k]){
+                    count++;
+                }
+            }
+        }
+        if(repeat==0 && count!=m){
             for(int j=0;j<m;j++){
                 sort[s][j]=data[i][j];
             }
             s++;
         }
+        if(count==m && repeat!=1){
+            r++;
+        }
     }
-    printf("s:\n");
+    //±Æ§Ç
+    int index[100];
+    for (int i = 0; i < s; i++) {
+        index[i] = -1;
+    }
+    for(int i=0;i<s;i++){
+        sorted(sort,s,m,0,index,i);
+    }
+    printf("%d\n",s+r);
     for(int i=0;i<s;i++){
         for(int j=0;j<m;j++){
-            printf("%d ",sort[i][j]);
+            printf("%d ",sort[index[i]][j]);
         }
         printf("\n");
     }
-    
 }
