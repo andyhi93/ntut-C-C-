@@ -30,10 +30,10 @@
 
 
     int main(){
-        char input[100],A[21],B[21],Vocabulary[50][21],*token,ans1[100]="\0",ans2[100]="\0",ans3[100]="\0";
+        char input[200],A[21],B[21],Vocabulary[50][21],*token,ans1[100]="\0",ans2[100]="\0",ans3[100]="\0";
         int count=0,dcount=0;
         KeyValuePair dict[50];
-        scanf("%99[^\n]",input);
+        scanf("%[^\n]",input);
         scanf(" %s",A);
         scanf(" %s",B);
         //printf("%s\n%s\n%s\n",input,A,B);
@@ -43,7 +43,7 @@
             token=strtok(NULL," ");
         }
         for(int i=0;i<count;i++){
-            printf("ans1:%s %d %d+",ans1,strlen(ans1),sizeof(ans1));
+            //printf("ans1:%s %d %d+",ans1,strlen(ans1),sizeof(ans1));
             int dindex=KeyFind(dict,Vocabulary[i],dcount);
             if(dindex==-1){
                 strcpy(dict[dcount].key,Vocabulary[i]);
@@ -67,14 +67,13 @@
 
                 strcat(ans2,Vocabulary[i]);
                 strcat(ans2," ");
-                
+
                 strcat(ans3,Vocabulary[i]);
                 strcat(ans3," ");
             }
-            printf("%s %d %d\n",Vocabulary[i],strlen(Vocabulary[i]),sizeof(Vocabulary[i]));
+            //printf("%s %d %d\n",Vocabulary[i],strlen(Vocabulary[i]),sizeof(Vocabulary[i]));
         }
         printf("%s\n%s\n%s\n",ans1,ans2,ans3);
         qsort(dict, dcount, sizeof(KeyValuePair), compareDict);
         for(int i=0;i<dcount;i++){printf("%s %d\n",dict[i].key,dict[i].value);}
-        //system("pause");
     }
