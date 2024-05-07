@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef enum scoreType_s{G,GPA,S}scoreType_t;
 typedef enum G_s{Aplus,A,Aduce,Bplus,B,Bduce,Cplus,C,Cduce,F,X}G_t;
@@ -20,13 +21,20 @@ typedef struct student {
 int FindIndex(char input_str[10],char rank[11][10]){
     for(int i=0;i<11;i++){
         if(strcmp(input_str,rank[i])==0)return i;
-    }printf("find worng\n");
+    }
+    printf("%s %s find worng\n",input_str,rank[0]);
     return -1;
+}
+
+int compareStudents(const void* a,const void* b){
+    student_data* student_a=(student_data*)a;
+    student_data* student_b=(student_data*)b;
+    return student_a->average_score-student_b->average_score;
 }
 
 int main(){int M,N;
     char temp[10],
-    G_rank[11][10]={"A-","A","A-","B+","B","B-","C+","C","C-","F","X"},
+    G_rank[11][10]={"A+","A","A-","B+","B","B-","C+","C","C-","F","X"},
     GPA_rank[11][10]={"4.3","4.0","3.7","3.3","3.0","2.7","2.3","2.0","1.7","1","0"},
     S_rank[11][10]={"90-100","85-89","80-84","77-79","73-76","70-72","67-69","63-66","60-62","1-59","0"};
     int intPoint[11]={95,87,82,78,75,70,68,65,60,50,0};
@@ -48,6 +56,7 @@ int main(){int M,N;
         students[i].average_score = 0;
         scanf(" %d",&id);
         students[i].id = id;
+        int sum=0;
         for(int j=0;j<M;j++){
             switch (course_types[j])
             {
@@ -55,18 +64,24 @@ int main(){int M,N;
             case G:
                 scanf("%s",input_str);
                 index=FindIndex(input_str,G_rank);
+                sum+=intPoint[index];
                 break;
             case GPA:
                 scanf("%s",input_str);
                 index=FindIndex(input_str,GPA_rank);
+                sum+=intPoint[index];
                 break;
             case S:
                 scanf("%s",input_str);
                 index=FindIndex(input_str,S_rank);
+                sum+=intPoint[index];
                 break;
             default:
                 printf("something wrong\n");
             }
         }
+        students[i].average_score=sum/M;
     }
+    qsort(students,N,sizeof(student_data),compareStudents);
+    for(int i=0;i<N;i++)printf("%d %d\n",students[i].id,students[i].average_score);
 }
