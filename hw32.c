@@ -50,7 +50,7 @@ void AddBack(nodep* head, nodep* tail, int data) {
 }
 
 void RemoveFront(nodep* head, nodep* tail) {
-    if (*head == NULL) printf("Double link list is empty\n"); 
+    if (*head == NULL) printf("Double link list is empty\n");
     else{
         nodep temp = *head;
         if (*head == *tail) {
@@ -87,7 +87,7 @@ void empty(nodep* head, nodep* tail) {
 }
 void insert(nodep* head, nodep* tail,int target, int data) {
     nodep newnode = create(data),current= (*head);
-    int index=0;
+    int index=1;
     while(target!=index && current->back!=(*head)){
         current=current->back;
         index++;
@@ -97,13 +97,11 @@ void insert(nodep* head, nodep* tail,int target, int data) {
         free(newnode);
         return;
     }
-    else if(current==*head)AddFront(head, tail, data);
-    else if(current==*tail)AddBack(head, tail, data);
     else{
-        newnode->front=current->front;
-        newnode->back=current;
-        current->front->back=newnode;
-        current->front=newnode;
+        newnode->front=current;
+        newnode->back=current->back;
+        current->back->front=newnode;
+        current->back=newnode;
     }
 }
 void removeT(nodep* head, nodep* tail,int target) {
