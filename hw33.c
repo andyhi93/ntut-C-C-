@@ -3,16 +3,16 @@
 #include <string.h>
 
 typedef struct queue {
-    int city,index;
-    struct queue *next;
+    int city;
+    struct queue *next,*last;
 } queue;
 typedef queue *queuePtr;
 
 queuePtr create(queuePtr *p,int city){
     queuePtr newNode = (queuePtr)malloc(sizeof(queue));
     newNode->city = city;
-    newNode->index = 0;
     newNode->next = NULL;
+    newNode->last = NULL;
     return newNode;
 }
 void push(queuePtr *p, int city){
@@ -24,14 +24,15 @@ void push(queuePtr *p, int city){
         queuePtr current=(*p);
         while(current->next!=NULL) current=current->next;
         current->next=newNode;
-        newNode->index = current->index+1;
+        newNode->last=current;
     }
 }
 void empty(queuePtr *p){
-    queuePtr current = (*p);
-    while((*p)!=NULL){
-        while(current->next!=NULL) current=current->next;
-        free(current);
+    queuePtr head = (*p),tail=(*p);
+    while(head->last!=NULL) head=head->last;
+    while(head!=NULL){
+        while(tail->next!=NULL) tail=tail->next;
+        free(tail);
     }
 }
 queuePtr* FindEmpty(queuePtr p[]){
@@ -39,13 +40,15 @@ queuePtr* FindEmpty(queuePtr p[]){
     while(p[i]!=NULL) i++;
     return &p[i];
 }
-queuePtr copyRoad(queuePtr *RoadData){
-    queuePtr temp = *RoadData,current =(*RoadData);
-    temp=temp+1;
-    while((*RoadData)->next!=NULL){
-        push(&temp, (*RoadData)->city);
-        *RoadData=(*RoadData)->next;
+queuePtr copyRoad(queuePtr *currnetRoad,queuePtr RoadData[]){
+    queuePtr *newRoad=(queuePtr)FindEmpty(RoadData);
+    queuePtr current=(*currnetRoad);
+    while(current->last!=NULL) current=current->last;
+    while(current!=NULL){
+        push(newRoad, current->city);
+        current=current->next;
     }
+    return *newRoad;
 }
 void Find(queuePtr RoadData[],queuePtr *currentRoad,int map[][2],int s,int e){
     if((*currentRoad)==NULL){
@@ -59,7 +62,9 @@ void Find(queuePtr RoadData[],queuePtr *currentRoad,int map[][2],int s,int e){
                 int next=(map[i][0]==s)?map[i][1]:map[i][0];
                 queuePtr front=(*currentRoad);
                 while(front->next!=NULL) front=front->next;
-                if(front->city!=s)Find(RoadData,FindEmpty(RoadData),map,s,e);
+                if(front->city!=s){
+                    Find(RoadData,copyRoad(currentRoad,RoadData),map,s,e);
+                }
             }
         }
     }
