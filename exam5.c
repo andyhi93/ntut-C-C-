@@ -1,6 +1,6 @@
-//�e�ǹM���]Pre-order Traversal�^ ���Ǭ��G�ڸ`�I -> ���l�� -> �k�l�� �Ĥ@�Ӭ���
-//���ǹM���]In-order Traversal�^ ���Ǭ��G���l�� -> �ڸ`�I -> �k�l�� �q�p�ƨ�j
-//��ǹM���]Post-order Traversal�^���Ǭ��G���l�� -> �k�l�� -> �ڸ`�I �̫�@�Ӭ���
+//前序遍歷（Pre-order Traversal） 順序為：根節點 -> 左子樹 -> 右子樹 第一個為根
+//中序遍歷（In-order Traversal） 順序為：左子樹 -> 根節點 -> 右子樹 從小排到大
+//後序遍歷（Post-order Traversal）順序為：左子樹 -> 右子樹 -> 根節點 最後一個為根
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,8 +26,8 @@ btree P_I_tree(char *dataP,char *dataI,int start,int end,int *preIndex) {
     for (in_index = start; in_index <= end; in_index++) {
         if (dataI[in_index] == Proot_data) break;
     }
-    root->left = P_I_tree(dataP, dataI, start, in_index - 1, preIndex); //��ثe�`�I�p
-    root->right = P_I_tree(dataP, dataI, in_index + 1, end, preIndex); //��ثe�`�I�j
+    root->left = P_I_tree(dataP, dataI, start, in_index - 1, preIndex); //比目前節點小
+    root->right = P_I_tree(dataP, dataI, in_index + 1, end, preIndex); //比目前節點大
     return root;
 }
 btree O_I_tree(char *dataO, char *dataI, int start, int end, int *postIndex) {
